@@ -32,10 +32,6 @@ public class Operation {
     // }
     @Override
     public String toString() {
-        return "Operation{" +
-                "operationType=" + operationType +
-                ", transactionId=" + transactionId +
-                ", dataItem='" + dataItem + '\'' +
-                '}';
+        return operationType.toString().substring(0, 1) + transactionId + "(" + dataItem + ")";
     }
 }

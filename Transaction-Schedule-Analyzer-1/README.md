@@ -258,3 +258,487 @@ Project Foundation and Domain Modeling
 Status:
 
 Day 1 Completed Successfully
+
+
+# Day 2 - Precedence Graph, Cycle Detection & Serializability Analysis
+
+## Date
+09 June 2026
+
+---
+
+# Goal of Today's Session
+
+Today's objective was to complete the core graph-based logic of the Transaction Schedule Analyzer.
+
+The focus was on:
+
+- Building the precedence graph
+- Detecting cycles in the graph
+- Determining conflict serializability
+- Generating serial schedules using topological sorting
+- Improving project architecture using a service layer
+- Generating all possible valid serial schedules
+
+---
+
+# Features Implemented
+
+## 1. Graph Data Structure
+
+Created:
+
+```text
+graph/Graph.java
+```
+
+Responsibilities:
+
+- Store transactions as vertices
+- Store precedence relationships as directed edges
+- Provide graph utility methods
+
+Implemented methods:
+
+- addVertex()
+- addEdge()
+- getNeighbors()
+- getVertices()
+- toString()
+
+Example:
+
+```text
+T1 -> T2
+T1 -> T3
+```
+
+Stored as:
+
+```text
+1 -> [2, 3]
+2 -> []
+3 -> []
+```
+
+---
+
+## 2. Precedence Graph Builder
+
+Created:
+
+```text
+graph/PrecedenceGraphBuilder.java
+```
+
+Responsibilities:
+
+- Create graph from operations and conflicts
+- Add all transactions as vertices
+- Add conflict-based edges
+
+Pipeline:
+
+```text
+Operations
+    +
+Conflicts
+    ↓
+Precedence Graph
+```
+
+---
+
+## 3. Cycle Detection
+
+Created:
+
+```text
+graph/CycleDetector.java
+```
+
+Algorithm:
+
+- DFS
+- Visited Set
+- Recursion Stack
+
+Purpose:
+
+```text
+Cycle Present
+    ↓
+Not Conflict Serializable
+```
+
+```text
+No Cycle
+    ↓
+Conflict Serializable
+```
+
+Example:
+
+```text
+T1 -> T2
+T2 -> T1
+```
+
+Result:
+
+```text
+Cycle Found
+```
+
+---
+
+## 4. Topological Sorting
+
+Created:
+
+```text
+graph/TopologicalSorter.java
+```
+
+Algorithm:
+
+- Kahn's Algorithm
+- In-Degree Method
+
+Purpose:
+
+Generate a valid serial schedule.
+
+Example:
+
+```text
+T1 -> T2
+```
+
+Output:
+
+```text
+[T1, T2]
+```
+
+---
+
+## 5. All Topological Orders
+
+Created:
+
+```text
+graph/AllTopologicalSorts.java
+```
+
+Algorithm:
+
+- Backtracking
+- Recursive exploration of all zero in-degree nodes
+
+Purpose:
+
+Generate all valid serial schedules.
+
+Example:
+
+Graph:
+
+```text
+T1 -> T2
+
+T3
+```
+
+Generated schedules:
+
+```text
+[T1, T2, T3]
+[T1, T3, T2]
+[T3, T1, T2]
+```
+
+This feature aligns directly with the original project goal.
+
+---
+
+## 6. Analysis Result Model
+
+Created:
+
+```text
+models/AnalysisResult.java
+```
+
+Purpose:
+
+Store complete analysis output.
+
+Contains:
+
+- Serializable status
+- Conflict list
+- Precedence graph
+- All serial schedules
+
+Implemented:
+
+```java
+toString()
+```
+
+for easy debugging and console output.
+
+---
+
+## 7. Service Layer
+
+Created:
+
+```text
+analyzer/SerializabilityAnalyzer.java
+```
+
+Purpose:
+
+Act as the central coordinator of the application.
+
+Workflow:
+
+```text
+Schedule
+    ↓
+Parser
+    ↓
+Conflict Detector
+    ↓
+Graph Builder
+    ↓
+Cycle Detector
+    ↓
+Topological Sort
+    ↓
+Analysis Result
+```
+
+This significantly improved code organization.
+
+---
+
+# Important Concepts Learned
+
+## Conflict Does NOT Mean Non-Serializable
+
+Example:
+
+```text
+R1(X)
+W2(X)
+```
+
+Conflict exists.
+
+Graph:
+
+```text
+T1 -> T2
+```
+
+No cycle.
+
+Therefore:
+
+```text
+Conflict Serializable
+```
+
+---
+
+## Precedence Graph Concept
+
+Edge:
+
+```text
+T1 -> T2
+```
+
+Means:
+
+```text
+T1 must appear before T2
+```
+
+in every valid serial schedule.
+
+---
+
+## Topological Sort
+
+Learnt how topological sorting can be used to generate valid serial schedules from a precedence graph.
+
+---
+
+## All Topological Orders
+
+Learnt how backtracking can generate all possible valid serial schedules rather than just one.
+
+---
+
+# Problems Encountered
+
+## 1. Package Errors
+
+Issue:
+
+```text
+Incorrect package declaration
+```
+
+Cause:
+
+Folder structure did not match package names.
+
+Solution:
+
+Reorganized project into:
+
+```text
+src/
+ ├── app/
+ ├── analyzer/
+ ├── graph/
+ ├── models/
+ └── parser/
+```
+
+---
+
+## 2. Java Execution Errors
+
+Issue:
+
+```text
+Could not find or load main class
+```
+
+Cause:
+
+Incorrect execution command for packaged classes.
+
+Solution:
+
+Learnt correct compilation and execution process.
+
+---
+
+## 3. Duplicate AnalysisResult Class
+
+Issue:
+
+```text
+models.AnalysisResult cannot be converted to app.AnalysisResult
+```
+
+Cause:
+
+Two AnalysisResult classes existed in different packages.
+
+Solution:
+
+Removed duplicate class and kept only:
+
+```text
+models/AnalysisResult.java
+```
+
+---
+
+# Current Project Status
+
+Backend Progress:
+
+```text
+Parser                     ✅
+Conflict Detection         ✅
+Graph Construction         ✅
+Cycle Detection            ✅
+Topological Sort           ✅
+All Serial Schedules       ✅
+Service Layer              ✅
+Analysis Result DTO        ✅
+```
+
+Overall Backend Completion:
+
+```text
+~95%
+```
+
+---
+
+# Sample Output
+
+```text
+===== ANALYSIS RESULT =====
+
+Serializable: YES
+
+Conflicts:
+R1(X) -> W2(X)
+
+Precedence Graph:
+1 -> [2]
+2 -> []
+3 -> []
+
+All Valid Serial Schedules:
+1. T1 T2 T3
+2. T1 T3 T2
+3. T3 T1 T2
+```
+
+---
+
+# Next Steps
+
+## Backend
+
+- Freeze Version 1 backend
+- Convert project into Spring Boot REST API
+
+Endpoints:
+
+```text
+POST /analyze
+```
+
+---
+
+## Frontend
+
+Tech Stack:
+
+- React
+- TypeScript
+- Tailwind CSS
+- React Flow
+
+Planned Features:
+
+- Schedule Input
+- Conflict Visualization
+- Precedence Graph Visualization
+- Serializable Status
+- Serial Schedule Display
+
+---
+
+# Key Achievement
+
+Today the project evolved from a collection of individual classes into a complete graph-based DBMS serializability analysis engine capable of:
+
+- Detecting conflicts
+- Building precedence graphs
+- Detecting cycles
+- Determining conflict serializability
+- Generating all valid serial schedules
