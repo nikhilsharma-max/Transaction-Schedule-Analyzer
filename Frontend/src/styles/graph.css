@@ -1,0 +1,35 @@
+.graph-card {
+
+  background: white;
+
+  border-radius: 24px;
+
+  padding: 25px;
+
+  border: 1px solid #e2e8f0;
+
+  box-shadow:
+      0 10px 40px
+      rgba(15,23,42,0.08);
+}
+
+.graph-card h2 {
+
+  color: #0f172a;
+
+  font-size: 1.6rem;
+
+  font-weight: 700;
+}
+.graph-container {
+
+  height: 550px;
+
+  background: #f8fafc;
+
+  border-radius: 16px;
+
+  border: 1px solid #e2e8f0;
+
+  overflow: hidden;
+}
