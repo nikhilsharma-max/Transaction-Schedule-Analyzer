@@ -1,11 +1,14 @@
-{
+{   
+  "scripts": {
+    "build-java": "cd Transaction-Schedule-Analyzer-1/src && find . -name \"*.java\" | xargs javac",
+    "start": "node server.js"
+  }
+,
   "dependencies": {
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "reactflow": "^11.11.4",
-    "scripts": {
-    "start": "node server.js"
-  }
+    "reactflow": "^11.11.4"
+
   }
 }
