@@ -3,6 +3,8 @@
 A full-stack web application that analyzes database transaction schedules for **conflict serializability**, generates the **precedence graph**, detects conflicts, and computes all valid serial schedules.
 
 ---
+# Link to webApp
+https://transaction-schedule-analyzer.vercel.app/
 
 ## Features
 
