@@ -1,8 +1,13 @@
 const express = require("express");
 const { exec } = require("child_process");
-
+const path = require("path");
 const router = express.Router();
-
+const javaDir = path.join(
+  __dirname,
+  "..",
+  "Transaction-Schedule-Analyzer-1",
+  "src"
+);
 router.post("/", (req, res) => {
 
   const { schedule } = req.body;

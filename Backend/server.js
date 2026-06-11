@@ -6,7 +6,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 app.use(cors());
 app.use(express.json());
-const port =  8080;
+const port = process.env.PORT || 8080;
 
 const analyzeRoute =
   require("./routes/analyze");
