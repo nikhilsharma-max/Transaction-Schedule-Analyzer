@@ -1,19 +1,32 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
+const app = express();
+const dotenv = require("dotenv");
+dotenv.config();
+app.use(cors());
+app.use(express.json());
+const port =  8080;
 
 const analyzeRoute =
   require("./routes/analyze");
 
-const app = express();
+console.log(process.cwd());
 
-app.use(cors());
+const javaPath =
+  path.join(
+    __dirname,
+    "../Transaction-Schedule-Analyzer-1/src"
+  );
 
-app.use(express.json());
-
+app.get("/", (req, res) => {
+  res.json({
+    status: "ok",
+    service: "Transaction Schedule Analyzer API"
+  });
+});
 app.use("/analyze", analyzeRoute);
 
-app.listen(8080, () => {
-  console.log(
-    "Server running on port 8080"
-  );
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
